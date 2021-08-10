@@ -13,16 +13,16 @@ import com.viniyone.fsnproject.domain.Category;
 @RequestMapping(value = "/categories")
 public class CategoryResource {
 
-	@RequestMapping(method=RequestMethod.GET) 
-	  public List<Category> listar() { 
-	    Category cat1 = new Category(1, "Computing"); 
-	    Category cat2 = new Category(2, "Office"); 
-	     
-	    List<Category> list = new ArrayList<>(); 
-	    list.add(cat1); 
-	    list.add(cat2); 
-	    
-	    return list; 
+	@RequestMapping(method=RequestMethod.GET)
+	  public List<Category> listing() {
+	    Category cat1 = new Category(1, "Computing");
+	    Category cat2 = new Category(2, "Office");
+
+	    List<Category> list = new ArrayList<>();
+	    list.add(cat1);
+	    list.add(cat2);
+
+	    return list;
 	  }
 	
 }
