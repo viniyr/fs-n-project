@@ -7,18 +7,29 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.viniyone.fsnproject.domain.Address;
 import com.viniyone.fsnproject.domain.Category;
 import com.viniyone.fsnproject.domain.City;
+import com.viniyone.fsnproject.domain.Customer;
 import com.viniyone.fsnproject.domain.Product;
 import com.viniyone.fsnproject.domain.State;
+import com.viniyone.fsnproject.domain.enums.TypeCustomer;
+import com.viniyone.fsnproject.repositories.AddressRepository;
 import com.viniyone.fsnproject.repositories.CategoryRepository;
 import com.viniyone.fsnproject.repositories.CityRepository;
+import com.viniyone.fsnproject.repositories.CustomerRepository;
 import com.viniyone.fsnproject.repositories.ProductRepository;
 import com.viniyone.fsnproject.repositories.StateRepository;
 
 @SpringBootApplication
 public class FsNProjectApplication implements CommandLineRunner {
 
+	@Autowired
+	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
+	
 	@Autowired
 	private StateRepository stateRepository;
 	
@@ -68,6 +79,17 @@ public class FsNProjectApplication implements CommandLineRunner {
 		stateRepository.saveAll(Arrays.asList(st1,st2));
 		cityRepository.saveAll(Arrays.asList(c1,c2,c3));
 		
+		Customer cus1 = new Customer(null, "Anya Yonoshi", "anyaya@gmail.com", "43910937705", TypeCustomer.NATURAL_PERSON);
+		
+		cus1.getPhones().addAll(Arrays.asList("11990262852", "27583604"));
+		
+		Address add1 = new Address(null, "Rua Herticular", "69" , "Casa com telhas", "Jordacity", "09298349", cus1, c2);
+		Address add2 = new Address(null, "Rua Paselio", "96", "Portão azul", "Diadema", "09795321", cus1, c2);
+		
+		cus1.getAddress().addAll(Arrays.asList(add1, add2));
+		
+		customerRepository.saveAll(Arrays.asList(cus1));
+		addressRepository.saveAll(Arrays.asList(add1,add2));		
 	}
 
 	
