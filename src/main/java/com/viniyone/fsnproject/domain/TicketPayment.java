@@ -4,13 +4,17 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.viniyone.fsnproject.domain.enums.PaymentStatus;
 
 @Entity
 public class TicketPayment extends Payment{
 	private static final long serialVersionUID = 1L;
 	
+	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
 	private Date expireDate;
+	
+	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
 	private Date paymentDate;
 	
 	public TicketPayment() {
