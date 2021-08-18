@@ -14,6 +14,7 @@ import com.viniyone.fsnproject.domain.Category;
 import com.viniyone.fsnproject.domain.City;
 import com.viniyone.fsnproject.domain.Customer;
 import com.viniyone.fsnproject.domain.Order;
+import com.viniyone.fsnproject.domain.OrderItem;
 import com.viniyone.fsnproject.domain.Payment;
 import com.viniyone.fsnproject.domain.Product;
 import com.viniyone.fsnproject.domain.State;
@@ -24,6 +25,7 @@ import com.viniyone.fsnproject.repositories.AddressRepository;
 import com.viniyone.fsnproject.repositories.CategoryRepository;
 import com.viniyone.fsnproject.repositories.CityRepository;
 import com.viniyone.fsnproject.repositories.CustomerRepository;
+import com.viniyone.fsnproject.repositories.OrderItemRepository;
 import com.viniyone.fsnproject.repositories.OrderRepository;
 import com.viniyone.fsnproject.repositories.PaymentRepository;
 import com.viniyone.fsnproject.repositories.ProductRepository;
@@ -55,6 +57,9 @@ public class FsNProjectApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PaymentRepository paymentRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(FsNProjectApplication.class, args);
@@ -119,6 +124,20 @@ public class FsNProjectApplication implements CommandLineRunner {
 		
 		orderRepository.saveAll(Arrays.asList(od1, od2));
 		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
+		
+		OrderItem oi1 = new OrderItem(od1, p1, 0.00, 1, 2000.00);
+		OrderItem oi2 = new OrderItem(od1, p3, 0.00, 2, 80.00);
+		OrderItem oi3 = new OrderItem(od2, p2, 100.00, 1, 800.00);
+		
+		p1.getItems().addAll(Arrays.asList(oi1, oi2));
+		p2.getItems().addAll(Arrays.asList(oi3));
+		
+		p1.getItems().addAll(Arrays.asList(oi1));
+		p2.getItems().addAll(Arrays.asList(oi3));
+		p3.getItems().addAll(Arrays.asList(oi2));
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1,oi2,oi3));
+		
 	}
 
 	
