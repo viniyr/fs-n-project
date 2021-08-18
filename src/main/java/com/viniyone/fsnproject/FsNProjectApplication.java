@@ -1,5 +1,6 @@
 package com.viniyone.fsnproject;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +9,23 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.viniyone.fsnproject.domain.Address;
+import com.viniyone.fsnproject.domain.CardPayment;
 import com.viniyone.fsnproject.domain.Category;
 import com.viniyone.fsnproject.domain.City;
 import com.viniyone.fsnproject.domain.Customer;
+import com.viniyone.fsnproject.domain.Order;
+import com.viniyone.fsnproject.domain.Payment;
 import com.viniyone.fsnproject.domain.Product;
 import com.viniyone.fsnproject.domain.State;
+import com.viniyone.fsnproject.domain.TicketPayment;
+import com.viniyone.fsnproject.domain.enums.PaymentStatus;
 import com.viniyone.fsnproject.domain.enums.TypeCustomer;
 import com.viniyone.fsnproject.repositories.AddressRepository;
 import com.viniyone.fsnproject.repositories.CategoryRepository;
 import com.viniyone.fsnproject.repositories.CityRepository;
 import com.viniyone.fsnproject.repositories.CustomerRepository;
+import com.viniyone.fsnproject.repositories.OrderRepository;
+import com.viniyone.fsnproject.repositories.PaymentRepository;
 import com.viniyone.fsnproject.repositories.ProductRepository;
 import com.viniyone.fsnproject.repositories.StateRepository;
 
@@ -41,6 +49,12 @@ public class FsNProjectApplication implements CommandLineRunner {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(FsNProjectApplication.class, args);
@@ -89,7 +103,22 @@ public class FsNProjectApplication implements CommandLineRunner {
 		cus1.getAddress().addAll(Arrays.asList(add1, add2));
 		
 		customerRepository.saveAll(Arrays.asList(cus1));
-		addressRepository.saveAll(Arrays.asList(add1,add2));		
+		addressRepository.saveAll(Arrays.asList(add1,add2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Order od1 = new Order(null, sdf.parse("22/03/2021 08:00"), cus1, add1);
+		Order od2 = new Order(null, sdf.parse("10/10/2021 17:00"), cus1, add2);
+		
+		Payment pay1 = new CardPayment(null, PaymentStatus.PAID, od1, 6);
+		od1.setPayment(pay1);
+		Payment pay2 = new TicketPayment(null, PaymentStatus.PENDING, od2, sdf.parse("13/10/2021 00:00"), null);
+		od2.setPayment(pay2);
+		
+		cus1.getOrders().addAll(Arrays.asList(od1, od2));
+		
+		orderRepository.saveAll(Arrays.asList(od1, od2));
+		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 	}
 
 	
