@@ -23,8 +23,7 @@ public class CategoryResource {
 	private CategoryService service;
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	  public ResponseEntity<Category> find(@PathVariable Integer id) {
-		
+	  public ResponseEntity<Category> find(@PathVariable Integer id) {	
 		Category obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 		
@@ -41,6 +40,12 @@ public class CategoryResource {
 	public ResponseEntity<Void> update(@RequestBody Category obj, @PathVariable Integer id) { 
 		obj.setId(id);
 		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	  public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 }
