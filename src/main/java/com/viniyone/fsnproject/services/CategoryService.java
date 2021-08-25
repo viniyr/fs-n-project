@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.viniyone.fsnproject.domain.Category;
+import com.viniyone.fsnproject.dto.CategoryDTO;
 import com.viniyone.fsnproject.repositories.CategoryRepository;
 import com.viniyone.fsnproject.services.exceptions.DataIntegrityException;
 import com.viniyone.fsnproject.services.exceptions.ObjectNotFoundException;
@@ -54,6 +55,10 @@ public class CategoryService {
 	public Page<Category> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) { 
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
+	}
+	
+	public Category fromDTO(CategoryDTO objDto) { 
+		return new Category(objDto.getId(), objDto.getName());
 	}
 	
 }
