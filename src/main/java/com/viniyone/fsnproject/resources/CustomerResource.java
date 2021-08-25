@@ -1,6 +1,7 @@
 package com.viniyone.fsnproject.resources;
 
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.viniyone.fsnproject.domain.Category;
 import com.viniyone.fsnproject.domain.Customer;
+import com.viniyone.fsnproject.dto.CategoryDTO;
 import com.viniyone.fsnproject.dto.CustomerDTO;
+import com.viniyone.fsnproject.dto.NewCustomerDTO;
 import com.viniyone.fsnproject.services.CustomerService;
 
 @RestController
@@ -33,6 +38,14 @@ public class CustomerResource {
 		Customer obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 		
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody NewCustomerDTO objDto) { 
+		Customer obj = service.fromDTO(objDto);
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 
 	@RequestMapping(value = "/{id}", method=RequestMethod.PUT)
@@ -66,6 +79,7 @@ public class CustomerResource {
 		Page<CustomerDTO> listDto = list.map(obj -> new CustomerDTO(obj));
 		return ResponseEntity.ok().body(listDto);
 	}
+	
 	
 	
 }
