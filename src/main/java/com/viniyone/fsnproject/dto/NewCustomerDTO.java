@@ -2,20 +2,44 @@ package com.viniyone.fsnproject.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.viniyone.fsnproject.services.validation.CustomerInsert;
+
+@CustomerInsert
 public class NewCustomerDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message="Field Required")
+	@Length(min=5, max=120, message="Length needs to be between 5 and 80 characters")
 	private String name;
+	
+	@NotEmpty(message="Field Required")
+	@Email(message="Invalid email!")
 	private String email;
+	
+	@NotEmpty(message="Field Required")
+	
 	private String cpfOrCnpj;
+	
 	private Integer type;
 	
+	@NotEmpty(message="Field Required")
 	private String street;
+	
+	@NotEmpty(message="Field Required")
 	private String number;
+	
 	private String complement;
 	private String neighborhood;
+	
+	@NotEmpty(message="Field Required")
 	private String zip;
 	
+	@NotEmpty(message="Field Required")
 	private String phone1;
 	private String phone2;
 	private String phone3;
