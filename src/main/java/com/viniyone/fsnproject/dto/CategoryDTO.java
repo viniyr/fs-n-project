@@ -13,7 +13,7 @@ public class CategoryDTO implements Serializable {
 	
 	private Integer id;
 	
-	@NotEmpty(message="Required field")
+	@NotEmpty(message="Field Requires")
 	@Length(min=5, max=80, message="Length needs to be between 5 and 80 characters")
 	private String name;
 	
