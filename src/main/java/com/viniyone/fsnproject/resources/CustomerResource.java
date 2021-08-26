@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.viniyone.fsnproject.domain.Category;
 import com.viniyone.fsnproject.domain.Customer;
-import com.viniyone.fsnproject.dto.CategoryDTO;
 import com.viniyone.fsnproject.dto.CustomerDTO;
 import com.viniyone.fsnproject.dto.NewCustomerDTO;
 import com.viniyone.fsnproject.services.CustomerService;
