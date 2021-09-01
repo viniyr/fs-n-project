@@ -15,6 +15,7 @@
 	<name>fs-n-project</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
@@ -46,21 +47,19 @@
 		</dependency>
 
 		<dependency>
-
 			<groupId>javax.validation</groupId>
-
 			<artifactId>validation-api</artifactId>
-
 		</dependency>
 
 		<dependency>
-
 			<groupId>org.hibernate</groupId>
-
 			<artifactId>hibernate-validator</artifactId>
-
 			<version>6.1.5.Final</version>
+		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
 	</dependencies>
