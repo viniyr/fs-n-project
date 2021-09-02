@@ -20,6 +20,7 @@ import com.viniyone.fsnproject.domain.Product;
 import com.viniyone.fsnproject.domain.State;
 import com.viniyone.fsnproject.domain.TicketPayment;
 import com.viniyone.fsnproject.domain.enums.PaymentStatus;
+import com.viniyone.fsnproject.domain.enums.Profile;
 import com.viniyone.fsnproject.domain.enums.TypeCustomer;
 import com.viniyone.fsnproject.repositories.AddressRepository;
 import com.viniyone.fsnproject.repositories.CategoryRepository;
@@ -122,16 +123,23 @@ public class DBService {
 		stateRepository.saveAll(Arrays.asList(st1, st2));
 		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
 
-		Customer cus1 = new Customer(null, "Vinicius Yonezawa", "vinicius.yonezawa@gmail.com", "43910937705",TypeCustomer.NATURAL_PERSON, pe.encode("vini123"));
-
+		Customer cus1 = new Customer(null, "Vinicius Ramos", "vinicius.yonezawa@gmail.com", "21994903007",TypeCustomer.NATURAL_PERSON, pe.encode("vini123"));
 		cus1.getPhones().addAll(Arrays.asList("11990262852", "27583604"));
+		
+		Customer cus2 = new Customer(null, "Vinicius Yonezawa", "viinilolz@gmail.com", "84540662090",TypeCustomer.NATURAL_PERSON, pe.encode("vini123"));
+		cus2.getPhones().addAll(Arrays.asList("11958227721", "27583609"));
+		cus2.addProfile(Profile.ADMIN);
+		
+		
 
 		Address add1 = new Address(null, "Rua Herticular", "69", "Casa com telhas", "Jordacity", "09298349", cus1, c2);
 		Address add2 = new Address(null, "Rua Paselio", "96", "Portão azul", "Diadema", "09795321", cus1, c2);
+		Address add3 = new Address(null, "Rua Viana", "326", "Arvore gigante", "Jordan", "09795323", cus2, c2);
 
 		cus1.getAddress().addAll(Arrays.asList(add1, add2));
-
-		customerRepository.saveAll(Arrays.asList(cus1));
+		cus2.getAddress().addAll(Arrays.asList(add3));
+		
+		customerRepository.saveAll(Arrays.asList(cus1, cus2));
 		addressRepository.saveAll(Arrays.asList(add1, add2));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");

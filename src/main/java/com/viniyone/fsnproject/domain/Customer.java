@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.viniyone.fsnproject.domain.enums.Profile;
 import com.viniyone.fsnproject.domain.enums.TypeCustomer;
 
 @Entity
@@ -40,8 +43,12 @@ public class Customer implements Serializable {
 	private List<Address> address = new ArrayList<>();
 	
 	@ElementCollection
-	@CollectionTable(name = "phone")
+	@CollectionTable(name = "PHONE")
 	private Set<String> phones = new HashSet<>();
+	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="PROFILES")
+	private Set<Integer> profiles = new HashSet<>();
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="customer")
@@ -49,6 +56,7 @@ public class Customer implements Serializable {
 	
 	
 	public Customer() {
+		addProfile(Profile.CUSTOMER);
 	}
 
 	public Customer(Integer id, String name, String email, String cpfOrCnpj, TypeCustomer type, String password) {
@@ -59,6 +67,7 @@ public class Customer implements Serializable {
 		this.cpfOrCnpj = cpfOrCnpj;
 		this.type = (type == null) ? null : type.getCod();
 		this.password = password;
+		addProfile(Profile.CUSTOMER);
 	}
 
 	public Integer getId() {
@@ -133,6 +142,14 @@ public class Customer implements Serializable {
 		this.password = password;
 	}
 
+	public Set<Profile> getProfiles() { 
+		return profiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	public void addProfile(Profile profile) { 
+		profiles.add(profile.getCod());
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
