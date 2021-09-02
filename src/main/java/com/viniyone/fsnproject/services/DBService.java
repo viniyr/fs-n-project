@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.viniyone.fsnproject.domain.Address;
@@ -33,6 +34,9 @@ import com.viniyone.fsnproject.repositories.StateRepository;
 @Service
 public class DBService {
 
+	@Autowired
+	private BCryptPasswordEncoder pe;
+	
 	@Autowired
 	private CustomerRepository customerRepository;
 
@@ -118,8 +122,7 @@ public class DBService {
 		stateRepository.saveAll(Arrays.asList(st1, st2));
 		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
 
-		Customer cus1 = new Customer(null, "Anya Yonoshi", "vinicius.yonezawa@gmail.com", "43910937705",
-				TypeCustomer.NATURAL_PERSON);
+		Customer cus1 = new Customer(null, "Vinicius Yonezawa", "vinicius.yonezawa@gmail.com", "43910937705",TypeCustomer.NATURAL_PERSON, pe.encode("vini123"));
 
 		cus1.getPhones().addAll(Arrays.asList("11990262852", "27583604"));
 

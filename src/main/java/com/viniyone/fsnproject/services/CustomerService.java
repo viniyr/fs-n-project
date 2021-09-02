@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.viniyone.fsnproject.domain.Address;
@@ -26,6 +27,9 @@ import com.viniyone.fsnproject.services.exceptions.ObjectNotFoundException;
 @Service
 public class CustomerService {
 
+	@Autowired
+	private BCryptPasswordEncoder pe;
+	
 	@Autowired
 	private CustomerRepository repo;
 
@@ -74,11 +78,11 @@ public class CustomerService {
 	}
 	
 	public Customer fromDTO(CustomerDTO objDto) { 
-		return new Customer(objDto.getId(), objDto.getName(), objDto.getEmail(), null, null);
+		return new Customer(objDto.getId(), objDto.getName(), objDto.getEmail(), null, null,null);
 	}
 	
 	public Customer fromDTO(NewCustomerDTO objDto) {
-		Customer cus = new Customer(null, objDto.getName(), objDto.getEmail(), objDto.getCpfOrCnpj(), TypeCustomer.toEnum(objDto.getType()));
+		Customer cus = new Customer(null, objDto.getName(), objDto.getEmail(), objDto.getCpfOrCnpj(), TypeCustomer.toEnum(objDto.getType()), pe.encode(objDto.getPassword()));
 		City city = new City(objDto.getCityId(), null, null);
 		Address add = new Address(null, objDto.getStreet(), objDto.getNumber(), objDto.getComplement(), objDto.getComplement(), objDto.getZip(), cus , city);
 		cus.getAddress().add(add);

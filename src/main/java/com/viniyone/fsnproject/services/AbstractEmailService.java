@@ -45,7 +45,7 @@ public abstract class AbstractEmailService implements EmailService{
 	protected String htmlFromTemplateOrder(Order obj) {
 		Context context = new Context();
 		context.setVariable("Order", obj);
-		return templateEngine.process("email/confirmacaoOrder", context);
+		return templateEngine.process("email/confirmationOrder", context);
 	}
 	
 	@Override
