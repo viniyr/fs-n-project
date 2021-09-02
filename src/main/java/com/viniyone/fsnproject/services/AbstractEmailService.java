@@ -36,24 +36,25 @@ public abstract class AbstractEmailService implements EmailService{
 		SimpleMailMessage sm = new SimpleMailMessage();
 		sm.setTo(obj.getCustomer().getEmail());
 		sm.setFrom(sender);
-		sm.setSubject("Order confirmed! Order id: " + obj.getId());
+		sm.setSubject("Order confirmado! Código: " + obj.getId());
 		sm.setSentDate(new Date(System.currentTimeMillis()));
 		sm.setText(obj.toString());
 		return sm;
 	}
 	
-	protected String htmlFromTemplatePedido(Order obj) { 
+	protected String htmlFromTemplateOrder(Order obj) {
 		Context context = new Context();
-		context.setVariable("order", obj);
-		return templateEngine.process("email/orderConfirmation", context);
+		context.setVariable("Order", obj);
+		return templateEngine.process("email/confirmacaoOrder", context);
 	}
 	
 	@Override
-	public void sendOrderConfirmationHtmlEmail(Order obj) { 
+	public void sendOrderConfirmationHtmlEmail(Order obj) {
 		try {
 			MimeMessage mm = prepareMimeMessageFromOrder(obj);
 			sendHtmlEmail(mm);
-		} catch (MessagingException e) {
+		}
+		catch (MessagingException e) {
 			sendOrderConfirmationEmail(obj);
 		}
 	}
@@ -63,11 +64,9 @@ public abstract class AbstractEmailService implements EmailService{
 		MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true);
 		mmh.setTo(obj.getCustomer().getEmail());
 		mmh.setFrom(sender);
-		mmh.setSubject("Order confirmed! Order id: " + obj.getId());
+		mmh.setSubject("Order confirmado! Código: " + obj.getId());
 		mmh.setSentDate(new Date(System.currentTimeMillis()));
-		mmh.setText(htmlFromTemplatePedido(obj), true);
-		
+		mmh.setText(htmlFromTemplateOrder(obj), true);
 		return mimeMessage;
 	}
-	
 }
