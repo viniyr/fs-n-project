@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:remove="all">Order Confirmation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<center>
+	<div style="background-image: url('http://www.mendonomasightings.com/wp-content/uploads/2014/05/A-Raccoon-and-a-housecat-are-friends-by-Siegfried-Matull1.jpg');";>
+		
+		<b><h1 style='color:#FF0789'>
+			Order number # <span th:text="${order.id}"> </span>
+		</b></h1>
+		<p style='color:  #FFFF00  '>
+			Instant: <span
+				th:text="${#dates.format(order.instant, 'dd/MM/yyyy hh:mm')}"></span>
+		</p>
+		<p style='color:  #FFFF00  '>
+			Customer: <span th:text="${order.customer.name}"></span>
+		</p>
+		<p style='color:  #FFFF00  '>
+			Payment situation: <span
+				th:text="${order.payment.status.description}"></span>
+		</p>
+		<h3 style='color:  #FFFF00  '>Order details:</h3>
+		<b><table border="1" style='color:  #FFFF00  '>
+			<tr>
+				<th>Product</th>
+				<th>Quantity</th>
+				<th>Unit price</th>
+				<th>Subtotal</th>
+			</tr>
+			<tr th:each="item : ${order.items}">
+				<td th:text="${item.product.name}">name</td>
+				<td th:text="${item.quantity}">quantity</td>
+				<td
+					th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 2, 
+'COMMA')}">price</td>
+				<td
+					th:text="${#numbers.formatDecimal(item.subTotal, 0, 'POINT', 2, 
+'COMMA')}">subTotal</td>
+			</tr>
+		</b></table>
+		<p style='color:  #FFFF00  '>
+			Total: <span
+				th:text="${#numbers.formatDecimal(order.Total, 0, 
+'POINT', 2, 'COMMA')}"></span>
+		</p>
+        </center>
+	</div>
+</body>
+</html>
