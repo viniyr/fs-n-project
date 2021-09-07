@@ -6,8 +6,12 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.viniyone.fsnproject.domain.Customer;
 import com.viniyone.fsnproject.domain.Order;
 import com.viniyone.fsnproject.domain.OrderItem;
 import com.viniyone.fsnproject.domain.TicketPayment;
@@ -15,6 +19,8 @@ import com.viniyone.fsnproject.domain.enums.PaymentStatus;
 import com.viniyone.fsnproject.repositories.OrderItemRepository;
 import com.viniyone.fsnproject.repositories.OrderRepository;
 import com.viniyone.fsnproject.repositories.PaymentRepository;
+import com.viniyone.fsnproject.security.UserSS;
+import com.viniyone.fsnproject.services.exceptions.AuthorizationException;
 import com.viniyone.fsnproject.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -70,5 +76,16 @@ public class OrderService {
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;
 	}
+
+	public Page<Order> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthorizationException("Access denied");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Customer customer = customerService.find(user.getId());
+		return repo.findByCustomer(customer,pageRequest);
+	}
+	
 	
 }
