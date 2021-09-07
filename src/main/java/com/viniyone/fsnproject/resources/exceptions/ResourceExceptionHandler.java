@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.viniyone.fsnproject.services.exceptions.AuthorizationException;
 import com.viniyone.fsnproject.services.exceptions.DataIntegrityException;
 import com.viniyone.fsnproject.services.exceptions.ObjectNotFoundException;
 import com.viniyone.fsnproject.services.exceptions.StandardError;
@@ -40,6 +41,13 @@ public class ResourceExceptionHandler {
 		}
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(ObjectNotFoundException e, HttpServletRequest request) { 
+		
+		StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 	
 }

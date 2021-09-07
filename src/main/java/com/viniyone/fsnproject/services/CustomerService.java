@@ -16,11 +16,14 @@ import org.springframework.stereotype.Service;
 import com.viniyone.fsnproject.domain.Address;
 import com.viniyone.fsnproject.domain.City;
 import com.viniyone.fsnproject.domain.Customer;
+import com.viniyone.fsnproject.domain.enums.Profile;
 import com.viniyone.fsnproject.domain.enums.TypeCustomer;
 import com.viniyone.fsnproject.dto.CustomerDTO;
 import com.viniyone.fsnproject.dto.NewCustomerDTO;
 import com.viniyone.fsnproject.repositories.AddressRepository;
 import com.viniyone.fsnproject.repositories.CustomerRepository;
+import com.viniyone.fsnproject.security.UserSS;
+import com.viniyone.fsnproject.services.exceptions.AuthorizationException;
 import com.viniyone.fsnproject.services.exceptions.DataIntegrityException;
 import com.viniyone.fsnproject.services.exceptions.ObjectNotFoundException;
 
@@ -36,12 +39,18 @@ public class CustomerService {
 	@Autowired
 	private AddressRepository addressRepository;
 	
-	public Customer find(Integer id) { 
-		  Optional<Customer> obj = repo.findById(id); 
-		  return obj.orElseThrow(() -> new ObjectNotFoundException( 
-		      "Object not found! Id: " + id + ", Type: " + Customer.class.getName())); 
-		} 
+	public Customer find(Integer id) {
 
+		UserSS user = UserService.authenticated();
+		if (user==null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Access denied");
+		}
+		
+		Optional<Customer> obj = repo.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Object not found! Id: " + id + ", Type: " + Customer.class.getName()));
+	}
+	
 	@Transactional
 	public Customer insert(Customer obj) { 
 		obj.setId(null);
