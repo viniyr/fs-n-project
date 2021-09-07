@@ -4,6 +4,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.SimpleMailMessage;
 
+import com.viniyone.fsnproject.domain.Customer;
 import com.viniyone.fsnproject.domain.Order;
 
 public interface EmailService {
@@ -16,4 +17,5 @@ public interface EmailService {
 	
 	void sendHtmlEmail(MimeMessage msg); 
 	
+	void sendNewPasswordEmail(Customer customer, String newPass);
 }

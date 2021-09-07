@@ -13,19 +13,20 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.viniyone.fsnproject.domain.Customer;
 import com.viniyone.fsnproject.domain.Order;
 
-public abstract class AbstractEmailService implements EmailService{
+public abstract class AbstractEmailService implements EmailService {
 
 	@Value("${default.sender}")
 	private String sender;
-	
+
 	@Autowired
 	private TemplateEngine templateEngine;
-	
+
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
+
 	@Override
 	public void sendOrderConfirmationEmail(Order obj) {
 		SimpleMailMessage sm = prepareSimpleMailMessageFromOrder(obj);
@@ -41,22 +42,37 @@ public abstract class AbstractEmailService implements EmailService{
 		sm.setText(obj.toString());
 		return sm;
 	}
-	
+
 	protected String htmlFromTemplateOrder(Order obj) {
 		Context context = new Context();
 		context.setVariable("Order", obj);
 		return templateEngine.process("email/confirmationOrder", context);
 	}
-	
+
 	@Override
 	public void sendOrderConfirmationHtmlEmail(Order obj) {
 		try {
 			MimeMessage mm = prepareMimeMessageFromOrder(obj);
 			sendHtmlEmail(mm);
-		}
-		catch (MessagingException e) {
+		} catch (MessagingException e) {
 			sendOrderConfirmationEmail(obj);
 		}
+	}
+
+	@Override
+	public void sendNewPasswordEmail(Customer customer, String newPass) {
+		SimpleMailMessage sm = prepareNewPasswordEmail(customer, newPass);
+		sendEmail(sm);
+	}
+
+	protected SimpleMailMessage prepareNewPasswordEmail(Customer customer, String newPass) {
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(customer.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("Reset your password");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("New password: " + newPass);
+		return sm;
 	}
 
 	protected MimeMessage prepareMimeMessageFromOrder(Order obj) throws MessagingException {
@@ -69,4 +85,5 @@ public abstract class AbstractEmailService implements EmailService{
 		mmh.setText(htmlFromTemplateOrder(obj), true);
 		return mimeMessage;
 	}
+
 }
