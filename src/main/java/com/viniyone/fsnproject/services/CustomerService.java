@@ -1,5 +1,6 @@
 package com.viniyone.fsnproject.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.viniyone.fsnproject.domain.Address;
 import com.viniyone.fsnproject.domain.City;
@@ -38,6 +40,9 @@ public class CustomerService {
 
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	public Customer find(Integer id) {
 
@@ -108,6 +113,10 @@ public class CustomerService {
 	private void updateData(Customer newObj, Customer obj) { 
 		newObj.setName(obj.getName());
 		newObj.setEmail(obj.getEmail());
+	}
+	
+	public URI uploadProfilePicture(MultipartFile multiPartFile) { 
+		return s3Service.uploadFile(multiPartFile);
 	}
 	
 	
