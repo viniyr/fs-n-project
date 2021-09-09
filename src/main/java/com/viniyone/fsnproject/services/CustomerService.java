@@ -1,5 +1,6 @@
 package com.viniyone.fsnproject.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +45,12 @@ public class CustomerService {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
+	
+	@Autowired
+	private ImageService imgService;
 	
 	public Customer find(Integer id) {
 
@@ -122,13 +130,10 @@ public class CustomerService {
 			throw new AuthorizationException("Access Denied");
 		}
 		
-		URI uri = s3Service.uploadFile(multiPartFile);
+		BufferedImage jpgImage = imgService.getJpgImageFromFile(multiPartFile);
+		String fileName = prefix + user.getId() + ".jpg";
 		
-		Customer cus = find(user.getId());
-		cus.setImgURL(uri.toString());
-		repo.save(cus);
-		
-		return uri;
+		return s3Service.uploadFile(imgService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}
 	
 	
