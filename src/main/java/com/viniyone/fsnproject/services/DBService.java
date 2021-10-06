@@ -69,7 +69,7 @@ public class DBService {
 
 		Category cat1 = new Category(null, "Computing");
 		Category cat2 = new Category(null, "Office");
-		Category cat3 = new Category(null, "Home, Bed & Bath,");
+		Category cat3 = new Category(null, "Home, Bed & Bath");
 		Category cat4 = new Category(null, "Electronics");
 		Category cat5 = new Category(null, "Gardening");
 		Category cat6 = new Category(null, "Decoration");

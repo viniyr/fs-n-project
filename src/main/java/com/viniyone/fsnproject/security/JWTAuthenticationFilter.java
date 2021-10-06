@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viniyone.fsnproject.dto.CredentialsDTO;
 
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private AuthenticationManager authenticationManager;
 
@@ -70,11 +70,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		private String json() {
 			long date = new Date().getTime();
-			return "{\"timestamp\": " + date + ", " 
-					+ "\"status\": 401, " 
-					+ "\"error\": \"Not authorized\", "
-					+ "\"message\": \"Wrong email or password\", " 
-					+ "\"path\": \"/login\"}";
+			return "{\"timestamp\": " + date + ", " + "\"status\": 401, " + "\"error\": \"Not authorized\", "
+					+ "\"message\": \"Wrong email or password\", " + "\"path\": \"/login\"}";
 		}
 	}
 
